@@ -6,11 +6,10 @@
 //
 //   node scripts/fetch-basemaps-assets.mjs
 //
-// Glyphs are bundled for ranges 0-1023 (Latin, Latin Extended, IPA, Greek,
-// Cyrillic) for the three fontstacks @protomaps/basemaps uses. With the style
-// generated at lang:"en" this covers labels for most of the world; scripts
-// outside these ranges (CJK, Arabic, …) fall back to unrendered labels offline
-// while all map geometry still renders.
+// Bundle Arabic/Kurdish glyphs in addition to the Latin/Cyrillic ranges so
+// MapLibre can shape Arabic-script labels correctly even when the app is
+// running fully offline. The default English basemap style still covers most
+// of the world, but Arabic-script labels require the Arabic blocks below.
 import { mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
@@ -19,8 +18,20 @@ const OUT = fileURLToPath(
   new URL("../apps/geolibre-desktop/public/basemaps-assets/", import.meta.url),
 );
 
-const FONTSTACKS = ["Noto Sans Regular", "Noto Sans Medium", "Noto Sans Italic"];
-const RANGES = ["0-255", "256-511", "512-767", "768-1023"];
+const FONTSTACKS = [
+  "Noto Sans Arabic",
+  "Noto Sans Regular",
+  "Noto Sans Medium",
+  "Noto Sans Italic",
+];
+const RANGES = [
+  "0-255",
+  "256-511",
+  "512-767",
+  "768-1023",
+  "1536-1791",
+  "1792-2047",
+];
 const FLAVORS = ["light", "dark", "white", "grayscale", "black"];
 const SPRITE_FILES = (flavor) => [
   `${flavor}.json`,
